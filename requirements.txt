@@ -1,0 +1,12 @@
+sentence-transformers
+chromadb
+pdfplumber
+pymupdf
+fastapi
+uvicorn
+sqlalchemy
+pymysql
+requests
+python-dotenv
+transformers
+accelerate

@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>LLM Research Assistant Agent</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="bg-light">
+    <div class="container py-4">
+      <h1 class="text-center mb-4">🧠 LLM Research Assistant Agent</h1>
+
+      <!-- Top Section -->
+      <div class="row g-4 mb-5">
+        <div class="col-md-4">
+          <label for="prompt" class="form-label"
+            >💬 Natural Language Query:</label
+          >
+          <textarea
+            id="prompt"
+            rows="5"
+            class="form-control"
+            placeholder="e.g., Find papers on transformers in NLP"
+          ></textarea>
+          <button onclick="submitQuery()" class="btn btn-primary mt-2 w-100">
+            🔍 Submit Query
+          </button>
+        </div>
+
+        <div class="col-md-4">
+          <label for="pdf-upload" class="form-label"
+            >📄 Upload PDF Paper:</label
+          >
+          <input
+            type="file"
+            id="pdf-upload"
+            accept="application/pdf"
+            class="form-control"
+          />
+          <button
+            onclick="uploadPDF()"
+            class="btn btn-outline-primary mt-2 w-100"
+          >
+            ⬆️ Upload PDF
+          </button>
+        </div>
+
+        <div class="col-md-4">
+          <label for="compare-prompt" class="form-label"
+            >⚖️ Compare Papers:</label
+          >
+          <input
+            type="text"
+            id="compare-prompt"
+            class="form-control"
+            placeholder="e.g., Compare uploaded with latest web paper"
+          />
+          <button
+            onclick="comparePapers()"
+            class="btn btn-secondary mt-2 w-100"
+          >
+            🧪 Compare Papers
+          </button>
+        </div>
+      </div>
+
+      <!-- Output Section -->
+      <div class="row g-4">
+        <div class="col-md-4">
+          <h4>🔎 Query Response:</h4>
+          <div
+            id="response"
+            class="bg-white border rounded p-3"
+            style="min-height: 150px"
+          >
+            <div
+              id="spinner-response"
+              class="spinner-border text-primary"
+              role="status"
+              style="display: none"
+            >
+              <span class="visually-hidden">Loading...</span>
+            </div>
+            <div id="response-content">Waiting for query...</div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <h4>📁 Upload Result:</h4>
+          <div
+            id="upload-response"
+            class="bg-white border rounded p-3"
+            style="min-height: 150px"
+          >
+            <div
+              id="spinner-upload"
+              class="spinner-border text-primary"
+              role="status"
+              style="display: none"
+            >
+              <span class="visually-hidden">Loading...</span>
+            </div>
+            <div id="upload-content">No file uploaded.</div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <h4>🧪 Paper Comparison Result:</h4>
+          <div
+            id="compare-response"
+            class="bg-white border rounded p-3"
+            style="min-height: 150px"
+          >
+            <div
+              id="spinner-compare"
+              class="spinner-border text-primary"
+              role="status"
+              style="display: none"
+            >
+              <span class="visually-hidden">Loading...</span>
+            </div>
+            <div id="compare-content">No comparison yet.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- your <script> block remains unchanged -->
+    <script>
+      const baseUrl = "http://127.0.0.1:8000";
+
+      async function submitQuery() {
+        const prompt = document.getElementById("prompt").value.trim();
+        if (!prompt) {
+          alert("Please enter a command first.");
+          return;
+        }
+
+        const spinner = document.getElementById("spinner-response");
+        const contentBox = document.getElementById("response-content");
+        spinner.style.display = "inline-block";
+        contentBox.innerHTML = "";
+
+        const formData = new FormData();
+        formData.append("prompt", prompt);
+
+        try {
+          const res = await fetch(`${baseUrl}/query/`, {
+            method: "POST",
+            body: formData,
+          });
+
+          const data = await res.json();
+          spinner.style.display = "none";
+
+          contentBox.innerHTML = "";
+          data.response.forEach((item, index) => {
+            const [title, abstract, link] = item;
+            const paperHTML = `
+              <div style="margin-bottom: 1.5rem;">
+                <h5>📄 Paper ${index + 1}</h5>
+                <p><strong>Title:</strong> ${title}</p>
+                <p><strong>Abstract:</strong> ${abstract}</p>
+                <p><a href="${link}" target="_blank">${link}</a></p>
+              </div>
+            `;
+            contentBox.innerHTML += paperHTML;
+          });
+        } catch (err) {
+          spinner.style.display = "none";
+          contentBox.innerText = "⚠️ Error: " + err;
+        }
+      }
+
+      async function uploadPDF() {
+        const fileInput = document.getElementById("pdf-upload");
+        if (fileInput.files.length === 0) {
+          alert("Please select a PDF file to upload.");
+          return;
+        }
+
+        const spinner = document.getElementById("spinner-upload");
+        const contentBox = document.getElementById("upload-content");
+        spinner.style.display = "inline-block";
+        contentBox.innerHTML = "";
+
+        const formData = new FormData();
+        formData.append("file", fileInput.files[0]);
+
+        try {
+          const res = await fetch(`${baseUrl}/upload/`, {
+            method: "POST",
+            body: formData,
+          });
+          const data = await res.json();
+          spinner.style.display = "none";
+
+          contentBox.innerHTML = `
+            <p><strong>Title:</strong> ${data.title}</p>
+            <p><strong>Abstract:</strong> ${data.abstract}</p>
+          `;
+        } catch (err) {
+          spinner.style.display = "none";
+          contentBox.innerText = "⚠️ Error: " + err;
+        }
+      }
+
+      async function comparePapers() {
+        const spinner = document.getElementById("spinner-compare");
+        const contentBox = document.getElementById("compare-content");
+        spinner.style.display = "inline-block";
+        contentBox.innerHTML = "";
+
+        try {
+          const res = await fetch(`${baseUrl}/compare/`, {
+            method: "POST",
+          });
+      
+          const data = await res.json();
+          spinner.style.display = "none";
+      
+          // ✅ render response as HTML, not plain text
+          contentBox.innerHTML = data.response;
+        } catch (err) {
+          spinner.style.display = "none";
+          contentBox.innerText = "⚠️ Error: " + err;
+        }
+      }
+    </script>
+  </body>
+</html>
