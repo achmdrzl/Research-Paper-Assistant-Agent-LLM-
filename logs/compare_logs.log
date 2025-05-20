@@ -137,3 +137,25 @@ The field of imbalanced self-supervised learning has not been extensively studie
 2025-05-20 21:58:38,940 - INFO - - Flesch Reading Ease      : 25.20
 2025-05-20 21:58:38,940 - INFO - - Input Length (tokens)    : 381
 2025-05-20 21:58:38,940 - INFO - - Compression Ratio (I/O)  : 7.62
+2025-05-20 22:00:29,705 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-20 22:00:29,705 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-20 22:00:29,767 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-20 22:00:29,767 - WARNING - CropBox missing from /Page, defaulting to MediaBox
+2025-05-20 22:00:30,993 - INFO - Prompt :
+Paper 1:
+Title: Boarding for ISS: Imbalanced Self-Supervised: Discovery of a Scaled   Autoencoder for Mixed Tabular Datasets
+Abstract: The field of imbalanced self-supervised learning, especially in the context of tabular data, has not been extensively studied. Existing research has predominantly focused on image datasets. This paper aims to fill this gap by examining the specific challenges posed by data imbalance in self-supervised learning in the domain of tabular data, with a primary focus on autoencoders. Autoencoders are widely employed for learning and constructing a new representation of a dataset, particularly for dimensionality reduction. They are also often used for generative model learning, as seen in variational autoencoders. When dealing with mixed tabular data, qualitative variables are often encoded...
+
+Paper 2:
+Title: 1 Self-Supervised Learning for Real-World Object Detection: a Survey
+Abstract: emerged as a promising approach in computer vision, networks (often only the encoder) using a well- enablingnetworkstolearnmeaningfulrepresentations designed pretext task. The aim of this pre-training from large unlabeled datasets. SSL methods fall task is to help the network learning features or into two main categories: instance discrimination and Masked Image Modeling (MIM). While instance invariances that are relevant for the downstream discriminationisfundamentaltoSSL,itwasoriginally task. In the literature, SSL methods have been designedforclassificationandmaybelesseffectivefor shown to improve SOTA performance for many use object detection, particularly for small objects. In this cases. More specifically, SSL allows the network to survey, we focus on SSL...
+
+Compare these two research papers in terms of goals, methods, contributions, strengths & weaknesses, and similarities.
+2025-05-20 22:00:35,104 - INFO - Model output:
+The field of imbalanced self-supervised learning has not been extensively studied. Autoencoders are widely employed for learning and constructing a new representation of a dataset. When dealing with mixed tabular data, qualitative variables are often encoded. SSL methods fall into two main categories: instance discrimination and Masked Image Modeling.
+2025-05-20 22:00:35,738 - INFO - Evaluation Metrics:
+2025-05-20 22:00:35,738 - INFO - - Output Token Count       : 50
+2025-05-20 22:00:35,738 - INFO - - Sentence Count           : 4
+2025-05-20 22:00:35,738 - INFO - - Flesch Reading Ease      : 25.20
+2025-05-20 22:00:35,738 - INFO - - Input Length (tokens)    : 381
+2025-05-20 22:00:35,738 - INFO - - Compression Ratio (I/O)  : 7.62

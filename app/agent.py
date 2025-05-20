@@ -79,7 +79,7 @@ def run_agent(prompt):
     prompt_lower = prompt.lower()
 
     if "upload" in prompt_lower:
-        return "Silakan upload file PDF melalui tombol upload."
+        return "Please upload the PDF file via the upload button."
     
     elif any(keyword in prompt.lower() for keyword in ["recent", "find", "search" , "look"]):
         papers = web_search.search_arxiv(prompt)
